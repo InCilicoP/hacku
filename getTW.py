@@ -12,10 +12,10 @@ def getTW(url):
 	
 	title = soup.find("title")
 	section = soup.findAll("div",attrs = {"class":"section"})
-	section = section[4]
+	section = section[4] #試行回数2ページ分です．
 	words = section.findAll("a")
 	title = title.getText().split('\t')
-	title = title[-2].strip('\n')
+	title = title[-2].strip('\n') #試行回数3ページ分です．
 	for i in range(len(words)):
 		words[i] = words[i].getText()
 	dic = {"title":title , "keywords":words}
