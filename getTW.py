@@ -8,8 +8,8 @@ def getTW(url):
 	req.add_header("User-agent",useragent)
 	res = urllib.request.urlopen(req)
 	html = res.read().decode()
-	soup = BeautifulSoup(html)
-	
+	soup = BeautifulSoup(html, "html.parser")
+
 	title = soup.find("title")
 	section = soup.findAll("div",attrs = {"class":"section"})
 	section = section[4]
