@@ -9,13 +9,14 @@ import getTW
 import json
 from bson.json_util import dumps
 from bson.json_util import loads
+import os.path
 
-define("port", default = 41580, help = "run on the given port", type = int)
+define("port", default = 8080, help = "run on the given port", type = int)
 
 class IndexHandler(tornado.web.RequestHandler):
     @tornado.web.asynchronous
     def get(self):
-        self.render("index.html")
+        self.render("./static/list.html")
 
 class SendWebSocket(tornado.websocket.WebSocketHandler):
     #on_message -> receive data
@@ -52,6 +53,7 @@ class SendWebSocket(tornado.websocket.WebSocketHandler):
             #dict>>str
             sendDataStr = json.dumps(sendDataNeo)
             self.write_message(sendDataStr)
+            print('送ったよ')
 
     #コールバックスタートで呼び出しが始まる
     def _send_message(self):
@@ -66,7 +68,20 @@ class SendWebSocket(tornado.websocket.WebSocketHandler):
 app = tornado.web.Application([
     (r"/", IndexHandler),
     (r"/ws", SendWebSocket),
+
 ])
+
+settings = {
+    "static_path": os.path.join(os.path.dirname(__file__), "static"),
+    "cookie_secret": "__TODO:_GENERATE_YOUR_OWN_RANDOM_VALUE_HERE__",
+    "xsrf_cookies": True,
+}
+app = tornado.web.Application([
+    (r"/", IndexHandler),
+    (r"/ws", SendWebSocket),
+    (r"/(apple-touch-icon\.png)", tornado.web.StaticFileHandler,
+    dict(path=settings['static_path'])),
+], **settings)
 
 if __name__ == "__main__":
     # MongoDBへの接続

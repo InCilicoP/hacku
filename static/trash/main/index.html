@@ -1,0 +1,47 @@
+
+<!doctype html>
+<html class="no-js">
+<head>
+    <meta charset="utf-8">
+    <title>AngularJSの勉強</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+</head>
+<body ng-app = "App">
+    
+  <header ng-controller="headerCtrl" class="page-header col-sm-12" style="margin-top:4px;">
+    <!-- header -->
+    <div class="col-sm-4">
+        <h1 style="margin:0">Title <small>this is title</small></h1>
+    </div>
+
+    <div class="col-sm-8"> 
+        <button type="button" class="btn btn-default btn-lg" style="margin-right:10px;">
+        <span class="glyphicon glyphicon-list-alt"></span> 読了論文リスト
+        </button>
+
+        <button type="button" class="btn btn-default btn-lg">
+        <span class="glyphicon glyphicon-font"></span> 知識マップ
+        </button>
+    </div>
+
+    <div class="col-sm-4">
+        <small>Hi! {{ userID }}!</small>
+    </div>
+
+  </header>
+
+  <main ng-controller="mainCtrl">
+    <!-- main -->
+  </main>
+
+  <footer ng-controller="footerCtrl">
+    <!-- footer -->
+  </footer>
+
+<link href="bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet"/>
+<script src="bower_components/angular/angular.js"></script>
+<script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+<script src="main.js"></script>
+</body>
+</html>
