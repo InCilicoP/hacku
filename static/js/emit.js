@@ -98,6 +98,8 @@ socket.onopen = function() {
     console.log('openしたよ');
     var testJson = {key:'reqDisp',value:"kinme"};
     socket.send(JSON.stringify(testJson));
+    var testJson2 = {key:'reqGomi',value:'discord_teck'};
+    socket.send(JSON.stringify(testJson2));
     //接続直後の処理
     var massage = {   key:"reqDisp",
     value:"{userid:kinme}"

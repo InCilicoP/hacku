@@ -10,6 +10,7 @@ import json
 from bson.json_util import dumps
 from bson.json_util import loads
 import os.path
+import qiita
 
 define("port", default = 8080, help = "run on the given port", type = int)
 
@@ -48,6 +49,26 @@ class SendWebSocket(tornado.websocket.WebSocketHandler):
             #dict>>str
             sendDataStr = json.dumps(sendDataNeo)
             self.write_message(sendDataStr)
+        elif messageJson['key'] == 'reqGomi':
+            #idからお気に入りリストを取ってくる
+            favAry = qiita.getFavID(messageJson['value'])
+            allAry = []
+            print(favAry)
+            tagAry = qiita.getTag(favAry)
+            for wordss in tagAry:
+                allAry.append(wordss)
+            countResult = qiita.countUniqWords(allAry)
+            sendData = {
+                'key':'resGomi',
+                'value':{
+                    'user':messageJson['value'],
+                    'wordCount':countResult,
+                }
+            }
+            print(sendData)
+            sendDataStr = json.dumps(sendData)
+            self.write_message(sendDataStr)
+
 
     #コールバックスタートで呼び出しが始まる
     def _send_message(self):
