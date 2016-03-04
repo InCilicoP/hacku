@@ -196,7 +196,7 @@ DESIGNED & DEVELOPED by FREEHTML5.CO
         .style({
           "font-family": "Impact",
           "font-size":function(d) { return d.size + "px"; },
-          "fill": function(d, i) { return colorScale(i); }
+          "fill": function(d, i) { console.log(d); return colorScale(i); }
         })
         .attr({
           "text-anchor":"middle",
@@ -206,7 +206,10 @@ DESIGNED & DEVELOPED by FREEHTML5.CO
         })
         .text(function(d) { return d.text; });
       }
+
     });
+
+    
   </script>
 
 </body>

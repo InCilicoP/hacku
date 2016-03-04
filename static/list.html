@@ -79,7 +79,7 @@ DESIGNED & DEVELOPED by FREEHTML5.CO
 				<!-- 3.リストの配置 -->
 				<ul class="nav navbar-nav">
 					<li class="active"><a href="#"><span class="glyphicon glyphicon-list-alt"></span> 論文リスト</a></li>
-					<li><a href="./static/data.html"><span class="glyphicon glyphicon-font"></span> 知識マップ</a></li>
+					<li><a href="./data.html"><span class="glyphicon glyphicon-font"></span> 知識マップ</a></li>
 				</ul>
 				<!-- 4.ボタン -->
 				<button type="button" class="btn btn-default navbar-btn">
@@ -92,7 +92,6 @@ DESIGNED & DEVELOPED by FREEHTML5.CO
 
 
 	<div id="fh5co-main" style="margin-top:100px;" ng-controller="mainCtrl">
-
 		<div class="container">
 			<div class="row">
 				<dic class="col-md-12 text-center">
@@ -112,8 +111,8 @@ DESIGNED & DEVELOPED by FREEHTML5.CO
 							<tbody>
 								<tr ng-repeat="item in items">
 									<th>{{!$index + 1}}</th>
-									<th>{{!item.title}}</th>
-									<th>{{!item.keyword}}</th>
+									<th>{{item.title}}</th>
+									<th>{{item.keyword}}</th>
 								</tr>
 							</tbody>
 						</table>

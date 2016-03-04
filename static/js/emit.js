@@ -1,5 +1,5 @@
 //Websocket
-//var socket = new WebSocket("ws://localhost:8080/ws");
+var socket = new WebSocket("ws://localhost:8080/ws");
 
 
 /*
@@ -34,18 +34,38 @@ app.controller('SignupCtrl', ['$scope', function($scope) {
 */
 
 //for list.html
+
+
+var listapp = angular.module('App', ['ui.bootstrap']);
+var items = {};
+
+listapp.controller('headerCtrl', function($scope, $location){
+    // headerで必要な機能のコード
+});
+
+listapp.controller('mainCtrl', function($scope){
+  // main で必要な機能のコード
+  $scope.items = items;
+
+});
+
+listapp.controller('footerCtrl', function($scope){
+  // footer で必要な機能のコード
+});
+
+
 //responseによって発火する関数群
 function resDisp(items){
     //リストに表示するアイテム達
+    console.log("YO!!");
+    //if(!items){
+        var items = [{title:"タイトルがないよ",keyword:"keywordがないよ"},
+                    {title:"タイトルがないよ",keyword:"keywordがないよ"}];
+    //}
     console.log(items);
-    if(!items){
-        var items = [{title:"タイトルがないよ",
-        keyword:"keywordがないよ"}];
-    }
-
-    listapp.controller('mainCtrl', ['$scope', function($scope){
+    listapp.controller('mainCtrl', function($scope){
         $scope.items = items;
-    }]);
+    });
 }
 
 function resData(items){
@@ -59,7 +79,6 @@ function subResult(bool){
     }else{
         alert("登録失敗．．．")
     }
-
 }
 
 function sf(bool){
@@ -70,7 +89,12 @@ function sf(bool){
         alert("ログイン失敗．．．")
     }
 }
-/*
+
+//発信イベント
+function subText(userid, url){
+
+}
+
 socket.onopen = function() {
     console.log('openしたよ');
     var testJson = {key:'reqDisp',value:"kinme"};
@@ -79,7 +103,7 @@ socket.onopen = function() {
     var massage = {   key:"reqDisp",
     value:"{userid:kinme}"
 };
-  //socket.send(JSON.stringify(massage));
+  socket.send(JSON.stringify(massage));
 };
 
 socket.onmessage = function(message) {
@@ -114,24 +138,5 @@ socket.onmessage = function(message) {
         return;
     }
 }
-*/
-console.log("a");
-var listapp = angular.module('App', ['ui.bootstrap']);
 
-listapp.controller('headerCtrl', ['$scope', '$location', function($scope, $location){
-    // headerで必要な機能のコード
-    $scope.onClick = function(){
-        console.log("YO");
-        $location.path('/bar/'); // クリック後遷移するテンプレ指定
-    };
-
-}])
-
-listapp.controller('mainCtrl', ['$scope', function($scope){
-  // main で必要な機能のコード
-  $scope.items = items;
-
-}])
-listapp.controller('footerCtrl', ['$scope', function($scope){
-  // footer で必要な機能のコード
-}]);
+resDisp("a");
