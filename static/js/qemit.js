@@ -108,6 +108,11 @@ function reqGomi(userid){
 
 socket.onopen = function() {
     console.log('openしたよ');
+    var testJson3 = {
+      key:'reqGomis',
+      value:['AZ37','discord_teck'],
+    };
+    socket.send(JSON.stringify(testJson3));
     /*
     var testJson = {key:'reqDisp',value:"kinme"};
     socket.send(JSON.stringify(testJson));
@@ -156,4 +161,3 @@ socket.onmessage = function(message) {
         return;
     }
 }
-
