@@ -31,7 +31,6 @@ class SendWebSocket(tornado.websocket.WebSocketHandler):
 
     #クライアントからメッセージが送られてくると呼び出される
     def on_message(self, message):
-        print (type(message))
         messageJson = json.loads(message)
         print(messageJson)
         if messageJson['key'] == 'test':
@@ -39,21 +38,16 @@ class SendWebSocket(tornado.websocket.WebSocketHandler):
         elif messageJson['key'] == 'reqDisp':
             #bsonを取ってくる
             resDispData = db_connect["test"].find({'userID':messageJson['value']})
-            print('bson')
-            print(resDispData)
             #bosn>>dict
-            sendData =loads(dumps(resDispData))[0]
             sendDataNeo = {
                 'key':'resDisp',
-                'value':{
-                    'userID':sendData['userID'],
-                    'url':sendData['url']
-                    }
+                'value':[]
                 }
+            for sendData in loads(dumps(resDispData)):
+                sendDataNeo['value'].append({'title':sendData['title'],'url':sendData['url'],'keywords':sendData['keywords']})
             #dict>>str
             sendDataStr = json.dumps(sendDataNeo)
             self.write_message(sendDataStr)
-            print('送ったよ')
 
     #コールバックスタートで呼び出しが始まる
     def _send_message(self):
@@ -68,7 +62,6 @@ class SendWebSocket(tornado.websocket.WebSocketHandler):
 app = tornado.web.Application([
     (r"/", IndexHandler),
     (r"/ws", SendWebSocket),
-
 ])
 
 settings = {
