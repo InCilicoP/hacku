@@ -118,6 +118,8 @@ socket.onopen = function() {
     //var massage = {   key:"reqDisp",
     //value:"{userid:kinme}"
     console.log("before emit");
+    var user1 = "discord_teck";
+    var user2 = "AZ37";
     reqGomi("AZ37");
 };
   //socket.send(JSON.stringify(massage));

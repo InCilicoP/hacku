@@ -105,6 +105,8 @@ DESIGNED & DEVELOPED by FREEHTML5.CO
   <!-- footer -->
 </footer>
 
+<div class="words">aaaaaaaa</div>
+
 <!--angularJS-->
 <script src="/static/bower_components/angular/angular.js"></script>
 <script src="/static/bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
@@ -216,9 +218,10 @@ DESIGNED & DEVELOPED by FREEHTML5.CO
         .style({
           "font-family": "Impact",
           "font-size":function(d) { return d.size + "px"; },
-          "fill": function(d) { console.log(d);return colorget(d.user); }
+          "fill": function(d) { return colorget(d.user); }
         })
         .attr({
+          "class" : function(d) { return d.text; },
           "text-anchor":"middle",
           "transform": function(d) {
             return "translate(" + [w/2+d.x, h/2+d.y] + ")rotate(" + d.rotate + ")";
@@ -228,7 +231,18 @@ DESIGNED & DEVELOPED by FREEHTML5.CO
       }
     //});
 }
-</script>
 
+$("svg").on("click","text",function(){
+  console.log($(this).attr('class'));
+  $("."+$(this).attr('class')).css("fill","red");
+});
+
+$(".words").on("click",function(){
+  console.log("YO");
+  $(".words").css("background-color","red");
+});
+
+$(".words").css("border", "3px solid red");
+</script>
 </body>
 </html>
