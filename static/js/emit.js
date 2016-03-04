@@ -57,12 +57,11 @@ listapp.controller('footerCtrl', function($scope){
 //responseによって発火する関数群
 function resDisp(items){
     //リストに表示するアイテム達
-    console.log("YO!!");
     //if(!items){
         var items = [{title:"タイトルがないよ",keyword:"keywordがないよ"},
                     {title:"タイトルがないよ",keyword:"keywordがないよ"}];
     //}
-    console.log(items);
+    //console.log(items);
     listapp.controller('mainCtrl', function($scope){
         $scope.items = items;
     });
@@ -110,9 +109,9 @@ socket.onmessage = function(message) {
     //console.log(message);
     try {
         var wsRes = $.parseJSON(message.data);
-        console.log("test"+wsRes);
+        //console.log("test"+wsRes);
         if(wsRes.key == "resDisp"){
-            console.log('yo');
+            //console.log('yo');
         }
         switch (wsRes.key){
             case 'resDisp':
@@ -127,7 +126,7 @@ socket.onmessage = function(message) {
             sf();
             break;
 
-            case 'subResult:
+            case 'subResult':
             subResult();
             break;
 

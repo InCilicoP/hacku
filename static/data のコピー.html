@@ -76,10 +76,8 @@ DESIGNED & DEVELOPED by FREEHTML5.CO
         </div>
         <!-- 3.リストの配置 -->
         <ul class="nav navbar-nav">
-          <li class="active"><a href="#"><span class="glyphicon glyphicon-list-alt"></span> 論文リスト</a></li>
-          <li><a href="./data.html"><span class="glyphicon glyphicon-font"></span> 知識マップ</a></li>
-          <li><a href="./qlist.html"><span class="glyphicon glyphicon-leaf"></span> Qiitaリスト</a></li>
-          <li><a href="./qdata.html"><span class="glyphicon glyphicon-link"></span> Qiitaマップ</a></li>
+          <li><a href="./list.html"><span class="glyphicon glyphicon-list-alt"></span> 論文リスト</a></li>
+          <li class="active"><a href="#"><span class="glyphicon glyphicon-font"></span> 知識マップ</a></li>
         </ul>
         <!-- 4.ボタン -->
         <button type="button" class="btn btn-default navbar-btn">
@@ -140,7 +138,6 @@ DESIGNED & DEVELOPED by FREEHTML5.CO
   <script>
     var w = $(window).width(), //横
         h = $(window).height(); //縦
-
     //loading
     d3.select("#wait")
     .append("svg")
@@ -154,48 +151,20 @@ DESIGNED & DEVELOPED by FREEHTML5.CO
       "font-size":20
     })
     .text("Loading...");
-
     d3.json('ranking.json', function(data){
-    
       var h = 600;
       var w = 600;
       data = data.splice(0, 150);
-
       var random = d3.random.irwinHall(2)
-
       var countMax = d3.max(data, function(d){ return d.count} );
       var sizeScale = d3.scale.linear().domain([0, countMax]).range([10, 100])
       var colorScale = d3.scale.category20();
-      var colorpalette = ["yellow","red","blue","green","purple","orange","cyan","deeppink","lightgreen","darkgreen","navy","moccasin","maroon","lightslategray","silver"];
-      var users = new Array();
-
       var words = data.map(function(d) {
-        console.log(d);
         return {
           text: d.word,
-          size: sizeScale(d.count), //頻出カウントを文字サイズに反映
-          user: d.user
+          size: sizeScale(d.count) //頻出カウントを文字サイズに反映
         };
       });
-
-      function colorget(user){
-
-         var num = users.length;
-         var flag =0;
-
-        for (var i=0; i<num ; i++) {
-          if (users[i]==user) {
-            flag=1; 
-            return colorpalette[i];
-          };
-        }
-
-        if (flag!=1) {
-          users.push(user);
-          return colorpalette[num];
-        }
-      }
-
       d3.layout.cloud().size([w, h])
       .words(words)
         .rotate(function() { return Math.round(1-random()) *90; }) //ランダムに文字を90度回転
@@ -203,7 +172,6 @@ DESIGNED & DEVELOPED by FREEHTML5.CO
         .fontSize(function(d) { return d.size; })
         .on("end", draw) //描画関数の読み込み
         .start();
-
       //wordcloud 描画
       function draw(words) {
         d3.selectAll('text').remove();
@@ -219,7 +187,7 @@ DESIGNED & DEVELOPED by FREEHTML5.CO
         .style({
           "font-family": "Impact",
           "font-size":function(d) { return d.size + "px"; },
-          "fill": function(d) { console.log(d);return colorget(d.user); }
+          "fill": function(d, i) { return colorScale(i); }
         })
         .attr({
           "text-anchor":"middle",
