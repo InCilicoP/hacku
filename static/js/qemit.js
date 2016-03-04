@@ -89,34 +89,44 @@ function sf(bool){
     }
 }
 
+function resGomi(value){
+    console.log("come resGomi");
+    console.log(value);
+    make(value);
+}
+
 //発信イベント
 function subText(userid, url){
 
 }
 
 function reqGomi(userid){
+    console.log("emit");
     var massage = {key:'reqGomi',value:userid};
     socket.send(JSON.stringify(massage));
 }
 
 socket.onopen = function() {
     console.log('openしたよ');
+    /*
     var testJson = {key:'reqDisp',value:"kinme"};
     socket.send(JSON.stringify(testJson));
     var testJson2 = {key:'reqGomi',value:'discord_teck'};
     socket.send(JSON.stringify(testJson2));
+    */
     //接続直後の処理
-    var massage = {   key:"reqDisp",
-    value:"{userid:kinme}"
+    //var massage = {   key:"reqDisp",
+    //value:"{userid:kinme}"
+    console.log("before emit");
+    reqGomi("AZ37");
 };
-  socket.send(JSON.stringify(massage));
-};
+  //socket.send(JSON.stringify(massage));
+//};
 
 socket.onmessage = function(message) {
-    //console.log(message);
     try {
         var wsRes = $.parseJSON(message.data);
-        //console.log("test"+wsRes);
+        console.log("res : "+wsRes.key);
         if(wsRes.key == "resDisp"){
             //console.log('yo');
         }
@@ -137,6 +147,9 @@ socket.onmessage = function(message) {
             subResult();
             break;
 
+            case 'resGomi':
+            resGomi(wsRes.value);
+            break;
         }
     } catch (e) {
         alert(e);
@@ -144,4 +157,3 @@ socket.onmessage = function(message) {
     }
 }
 
-resDisp("a");
