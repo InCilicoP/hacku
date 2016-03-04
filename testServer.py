@@ -26,8 +26,8 @@ class SendWebSocket(tornado.websocket.WebSocketHandler):
     #index.htmlでコネクションが確保されると呼び出される
     def open(self):
         self.i = 0
-        self.callback = PeriodicCallback(self._send_message, 400) #遅延用コールバック
-        self.callback.start()
+        #self.callback = PeriodicCallback(self._send_message, 400) #遅延用コールバック
+        #self.callback.start()
         print ("WebSocket opened")
 
     #クライアントからメッセージが送られてくると呼び出される

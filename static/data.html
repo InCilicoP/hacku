@@ -165,6 +165,8 @@ DESIGNED & DEVELOPED by FREEHTML5.CO
       var countMax = d3.max(data, function(d){ return d.count} );
       var sizeScale = d3.scale.linear().domain([0, countMax]).range([10, 100])
       var colorScale = d3.scale.category20();
+      var colorpalette = ["yellow","red","blue","green","purple","orange","cyan","deeppink","lightgreen","darkgreen","navy","moccasin","maroon","lightslategray","silver"];
+      var users = new Array();
 
       var words = data.map(function(d) {
         return {
@@ -172,6 +174,24 @@ DESIGNED & DEVELOPED by FREEHTML5.CO
           size: sizeScale(d.count) //頻出カウントを文字サイズに反映
         };
       });
+
+      function colorget(user){
+
+         var num = users.length;
+         var flag =0;
+
+        for (var i=0; i<num ; i++) {
+          if (users[i]==user) {
+            flag=1; 
+            return colorpalette[i];
+          };
+        }
+
+        if (flag!=1) {
+          users.push(user);
+          return colorpalette[num];
+        }
+      }
 
       d3.layout.cloud().size([w, h])
       .words(words)
@@ -196,7 +216,7 @@ DESIGNED & DEVELOPED by FREEHTML5.CO
         .style({
           "font-family": "Impact",
           "font-size":function(d) { return d.size + "px"; },
-          "fill": function(d, i) { console.log(d); return colorScale(i); }
+          "fill": function(d) { return colorget(d.user); }
         })
         .attr({
           "text-anchor":"middle",
@@ -206,10 +226,7 @@ DESIGNED & DEVELOPED by FREEHTML5.CO
         })
         .text(function(d) { return d.text; });
       }
-
     });
-
-    
   </script>
 
 </body>

@@ -112,25 +112,24 @@ socket.onmessage = function(message) {
     //console.log(message);
     try {
         var wsRes = $.parseJSON(message.data);
-        console.log(wsRes);
+        console.log("test"+wsRes);
         if(wsRes.key == "resDisp"){
             console.log('yo');
         }
         switch (wsRes.key){
             case 'resDisp':
-            console.log('alertはくそ');
-            resDisp(weRes.value);
+            resDisp(wsRes.value);
             break;
 
             case 'resData':
             resData(wsRes.value);
             break;
 
-            case sf:
+            case 'sf':
             sf();
             break;
 
-            case subResult:
+            case 'subResult:
             subResult();
             break;
 
