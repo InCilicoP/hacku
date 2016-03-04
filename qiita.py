@@ -28,3 +28,10 @@ def countUniqWords(uniqDict,keywords):
         if word in uniqDict:
             uniqDict[word] += 1
     return uniqDict
+
+def convertUniqDict(uniqDict):
+    result = []
+    tempDict = list(uniqDict.items())
+    for i in range(len(tempDict)):
+        result.append({"word":tempDict[i][0],"count":tempDict[i][1]})
+    return result
