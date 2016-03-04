@@ -37,6 +37,7 @@ class SendWebSocket(tornado.websocket.WebSocketHandler):
         if messageJson['key'] == 'test':
             print(messageJson['value'])
         elif messageJson['key'] == 'reqDisp':
+            print('reqDispのリクエストが来ました')
             #bsonを取ってくる
             resDispData = db_connect["test"].find({'userID':messageJson['value']})
             #bosn>>dict
@@ -50,19 +51,38 @@ class SendWebSocket(tornado.websocket.WebSocketHandler):
             sendDataStr = json.dumps(sendDataNeo)
             self.write_message(sendDataStr)
         elif messageJson['key'] == 'reqGomi':
+            print('reqGomiのリクエストがきました')
             #idからお気に入りリストを取ってくる
             favAry = qiita.getFavID(messageJson['value'])
             allAry = []
-            print(favAry)
             tagAry = qiita.getTag(favAry)
             for wordss in tagAry:
                 allAry.append(wordss)
-            print('allary')
-            print(allAry)
             countResult = qiita.countUniqWords(allAry,messageJson['value'])
             sendData = {
                 'key':'resGomi',
                 'value':countResult
+            }
+            print(sendData)
+            sendDataStr = json.dumps(sendData)
+            self.write_message(sendDataStr)
+        elif messageJson['key'] == 'reqGomis':
+            print('reqGomisのリクエストがきました')
+            fkinResult = []
+            allAry = []
+            for userID in messageJson['value']:
+                print(userID)
+                #idからお気に入りリストを取ってくる
+                favAry = qiita.getFavID(userID)
+                tagAry = qiita.getTag(favAry)
+                for wordss in tagAry:
+                    allAry.append(wordss)
+                countResult = qiita.countUniqWords(allAry,userID)
+                for countResultEach in countResult:
+                    fkinResult.append(countResultEach)
+            sendData = {
+                'key':'resGomis',
+                'value':fkinResult
             }
             print(sendData)
             sendDataStr = json.dumps(sendData)
