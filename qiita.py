@@ -18,13 +18,13 @@ def getTag(idList): #記事IDをリストで渡すとリスト上全ての記事
     return words
 
 def makeUniqDict(keywords):
-	uniqDict = {}
-	for word in keywords:
-		uniqDict[word] = 0
+    uniqDict = {}
+    for word in keywords:
+        uniqDict[word] = 0
     return uniqDict
 
 def countUniqWords(uniqDict,keywords):
-	for word in keywords:
-		if word in uniqDict:
-			uniqDict[word] += 1
+    for word in keywords:
+        if word in uniqDict:
+            uniqDict[word] += 1
     return uniqDict
