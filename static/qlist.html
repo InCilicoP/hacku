@@ -1,7 +1,9 @@
 <!--
 //////////////////////////////////////////////////////
+
 FREE HTML5 TEMPLATE
 DESIGNED & DEVELOPED by FREEHTML5.CO
+
 //////////////////////////////////////////////////////
 -->
 
@@ -77,8 +79,8 @@ DESIGNED & DEVELOPED by FREEHTML5.CO
         <!-- 3.リストの配置 -->
         <ul class="nav navbar-nav">
           <li><a href="./list.html"><span class="glyphicon glyphicon-list-alt"></span> 論文リスト</a></li>
-          <li class="active"><a href="#"><span class="glyphicon glyphicon-font"></span> 知識マップ</a></li>
-          <li><a href="./qlist.html"><span class="glyphicon glyphicon-leaf"></span> Qiitaリスト</a></li>
+          <li><a href="./data.html"><span class="glyphicon glyphicon-font"></span> 知識マップ</a></li>
+          <li class="active"><a href="./qlist.html"><span class="glyphicon glyphicon-leaf"></span> Qiitaリスト</a></li>
           <li><a href="./qdata.html"><span class="glyphicon glyphicon-link"></span> Qiitaマップ</a></li>
         </ul>
         <!-- 4.ボタン -->
@@ -92,10 +94,37 @@ DESIGNED & DEVELOPED by FREEHTML5.CO
 
 
   <div id="fh5co-main" style="margin-top:100px;" ng-controller="mainCtrl">
-  
-  <svg></svg>
+    <div class="container">
+      <div class="row">
 
-  </div>
+        <dic class="col-md-12 text-center">
+          <h2 class="fh5co-serif fh5co-lead">Qiitaストックリスト<a class="btn btn-primary" role="button"><span class="glyphicon glyphicon-plus-sign"></soan></a></h2>
+        </div>
+
+        <div class="col-md-8 text-center">
+          <div class="fh5co-spacer fh5co-spacer-sm"></div>
+          <div class="container center-block">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>記事名</th>
+                  <th>タグ</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="item in items">
+                  <th>{{!$index + 1}}</th>
+                  <th>{{item.title}}</th>
+                  <th>{{item.tag}}</th>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div>
 
     <footer id="fh5co-footer">
       <div class="container">
@@ -133,104 +162,7 @@ DESIGNED & DEVELOPED by FREEHTML5.CO
   <script src="/static/js/fastclick.js"></script>
   <!-- Main JS -->
   <script src="/static/js/main.js"></script>
-  <script src="/static/js/emit.js"></script>
-  <!-- d3.js -->
-  <script src="/static/js/d3.v3.min.js"></script>
-  <script src="/static/js/d3.layout.cloud.js"></script>
-  <script>
-    var w = $(window).width(), //横
-        h = $(window).height(); //縦
-
-    //loading
-    d3.select("#wait")
-    .append("svg")
-    .attr("width",w)
-    .attr("height",h)
-    .append("text")
-    .attr({
-      x:w/2,
-      y:h/2,
-      fill:"black",
-      "font-size":20
-    })
-    .text("Loading...");
-
-    d3.json('ranking.json', function(data){
-      
-      var h = 600;
-      var w = 600;
-      data = data.splice(0, 150);
-
-      var random = d3.random.irwinHall(2)
-
-      var countMax = d3.max(data, function(d){ return d.count} );
-      var sizeScale = d3.scale.linear().domain([0, countMax]).range([10, 100])
-      var colorScale = d3.scale.category20();
-      var colorpalette = ["yellow","red","blue","green","purple","orange","cyan","deeppink","lightgreen","darkgreen","navy","moccasin","maroon","lightslategray","silver"];
-      var users = new Array();
-
-      var words = data.map(function(d) {
-        console.log(d);
-        return {
-          text: d.word,
-          size: sizeScale(d.count), //頻出カウントを文字サイズに反映
-          user: d.user
-        };
-      });
-
-      function colorget(user){
-
-         var num = users.length;
-         var flag =0;
-
-        for (var i=0; i<num ; i++) {
-          if (users[i]==user) {
-            flag=1; 
-            return colorpalette[i];
-          };
-        }
-
-        if (flag!=1) {
-          users.push(user);
-          return colorpalette[num];
-        }
-      }
-
-      d3.layout.cloud().size([w, h])
-      .words(words)
-        .rotate(function() { return Math.round(1-random()) *90; }) //ランダムに文字を90度回転
-        .font("Impact")
-        .fontSize(function(d) { return d.size; })
-        .on("end", draw) //描画関数の読み込み
-        .start();
-
-      //wordcloud 描画
-      function draw(words) {
-        d3.selectAll('text').remove();
-        d3.select("svg")
-        .attr("width",w)
-        .attr("height",h)
-        .append("g")
-        .attr("transform", "translate(0,0)")
-        .selectAll("text")
-        .data(words)
-        .enter()
-        .append("text")
-        .style({
-          "font-family": "Impact",
-          "font-size":function(d) { return d.size + "px"; },
-          "fill": function(d) { console.log(d);return colorget(d.user); }
-        })
-        .attr({
-          "text-anchor":"middle",
-          "transform": function(d) {
-            return "translate(" + [w/2+d.x, h/2+d.y] + ")rotate(" + d.rotate + ")";
-          }
-        })
-        .text(function(d) { return d.text; });
-      }
-    });
-  </script>
+  <script src="/static/js/qemit.js"></script>
 
 </body>
 </html>
