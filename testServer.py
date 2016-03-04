@@ -57,6 +57,8 @@ class SendWebSocket(tornado.websocket.WebSocketHandler):
             tagAry = qiita.getTag(favAry)
             for wordss in tagAry:
                 allAry.append(wordss)
+            print('allary')
+            print(allAry)
             countResult = qiita.countUniqWords(allAry,messageJson['value'])
             sendData = {
                 'key':'resGomi',
