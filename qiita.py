@@ -17,7 +17,7 @@ def getTag(idList): #記事IDをリストで渡すとリスト上全ての記事
             words.append(i['name'])
     return words
 
-def countUniqWords(keywords):
+def countUniqWords(keywords,userID):
     uniqDict = {}
     for word in keywords:
         uniqDict[word] = 0
@@ -26,5 +26,5 @@ def countUniqWords(keywords):
     result = []
     tempDict = list(uniqDict.items())
     for i in range(len(tempDict)):
-        result.append({"word":tempDict[i][0],"count":tempDict[i][1]})
+        result.append({"word":tempDict[i][0],"count":tempDict[i][1],"userID":userID})
     return result

@@ -57,18 +57,14 @@ class SendWebSocket(tornado.websocket.WebSocketHandler):
             tagAry = qiita.getTag(favAry)
             for wordss in tagAry:
                 allAry.append(wordss)
-            countResult = qiita.countUniqWords(allAry)
+            countResult = qiita.countUniqWords(allAry,messageJson['value'])
             sendData = {
                 'key':'resGomi',
-                'value':{
-                    'user':messageJson['value'],
-                    'wordCount':countResult,
-                }
+                'value':countResult
             }
             print(sendData)
             sendDataStr = json.dumps(sendData)
             self.write_message(sendDataStr)
-
 
     #コールバックスタートで呼び出しが始まる
     def _send_message(self):
