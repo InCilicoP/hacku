@@ -75,6 +75,7 @@ class SendWebSocket(tornado.websocket.WebSocketHandler):
                 #idからお気に入りリストを取ってくる
                 favAry = qiita.getFavID(userID)
                 tagAry = qiita.getTag(favAry)
+                allAry = []
                 for wordss in tagAry:
                     allAry.append(wordss)
                 countResult = qiita.countUniqWords(allAry,userID)
@@ -114,6 +115,20 @@ app = tornado.web.Application([
     (r"/(apple-touch-icon\.png)", tornado.web.StaticFileHandler,
     dict(path=settings['static_path'])),
 ], **settings)
+
+def addCount(ary,dicti):
+    for docAry in ary:
+        for docAry2 in ary:
+            if docAry != docAry2:
+                swicher = 0
+                for docDict in dicti[docAry]:
+                    if docDict == docAry2:
+                        swicher = 1
+                if swicher == 0:
+                    dicti[docAry] = docAry2
+    return dicti
+
+
 
 if __name__ == "__main__":
     # MongoDBへの接続
