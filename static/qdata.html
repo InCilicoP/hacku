@@ -95,7 +95,9 @@ DESIGNED & DEVELOPED by FREEHTML5.CO
     </div>
 
     <svg></svg>
-
+    <div id="lists">
+      <div id="list"></div>
+    </div>
   </div>
 
   <footer id="fh5co-footer">
@@ -173,7 +175,8 @@ DESIGNED & DEVELOPED by FREEHTML5.CO
           return {
             text: d.word,
           size: sizeScale(d.count), //頻出カウントを文字サイズに反映
-          user: d.userID
+          user: d.userID,
+          count: d.count
         };
       });
 
@@ -223,6 +226,8 @@ DESIGNED & DEVELOPED by FREEHTML5.CO
         .attr({
           "class" : function(d) { return d.text; },
           "text-anchor":"middle",
+          "default-user": function(d) { return d.user; },
+          "default-count": function(d) { return d.count; },
           "default-color": function(d) { return colorget(d.user); },
           "transform": function(d) {
             return "translate(" + [w/2+d.x, h/2+d.y] + ")rotate(" + d.rotate + ")";
@@ -242,7 +247,11 @@ $("svg").on("click","text",function(){
 $("svg").on({
   "mouseenter": function(){
     console.log("on! "+$(this).html());
-    $("."+$(this).attr('class')).css("fill", "black");
+    $("."+$(this).attr('class')).each(function(i){
+      $(this).css("fill", "black");
+      //要素の詳細追加
+      $("#lists").append("<p>User="+$(this).attr('default-user')+": count="+$(this).attr('default-count')+"</p>");
+    });
   },
   "mouseleave": function(){
     console.log("off! "+$(this).attr('class'));
@@ -250,7 +259,7 @@ $("svg").on({
     $("."+$(this).attr('class')).each(function(i){
       $(this).css("fill", $(this).attr('default-color'));
     });
-    
+    $("#lists").contents().remove();
   }
 }, "text");
 
