@@ -95,7 +95,7 @@ DESIGNED & DEVELOPED by FREEHTML5.CO
     </div>
 
     <svg></svg>
-    <div id="lists">
+    <div id="lists" style="wight:600px; border: medium solid #000;">
       <div id="list"></div>
     </div>
   </div>
@@ -250,7 +250,8 @@ $("svg").on({
     $("."+$(this).attr('class')).each(function(i){
       $(this).css("fill", "black");
       //要素の詳細追加
-      $("#lists").append("<p>User="+$(this).attr('default-user')+": count="+$(this).attr('default-count')+"</p>");
+      var color = "\'"+$(this).attr('default-color')+"\'";
+      $("#lists").append("<h3><b style='color="+color+"'>"+$(this).attr('default-user')+"</b>さんは"+$(this).attr('default-count')+"記事ストックしています．</h3>");
     });
   },
   "mouseleave": function(){
@@ -259,7 +260,7 @@ $("svg").on({
     $("."+$(this).attr('class')).each(function(i){
       $(this).css("fill", $(this).attr('default-color'));
     });
-    $("#lists").contents().remove();
+    //$("#lists").contents().remove();
   }
 }, "text");
 
