@@ -36,24 +36,6 @@ app.controller('SignupCtrl', ['$scope', function($scope) {
 //for list.html
 
 
-var listapp = angular.module('App', ['ui.bootstrap']);
-var items = {};
-
-listapp.controller('headerCtrl', function($scope, $location){
-    // headerで必要な機能のコード
-});
-
-listapp.controller('mainCtrl', function($scope){
-  // main で必要な機能のコード
-  $scope.items = items;
-
-});
-
-listapp.controller('footerCtrl', function($scope){
-  // footer で必要な機能のコード
-});
-
-
 //responseによって発火する関数群
 function resDisp(items){
     //リストに表示するアイテム達
@@ -106,13 +88,18 @@ function reqGomi(userid){
     socket.send(JSON.stringify(massage));
 }
 
+function reqGomis(users){
+    var massage = {key:'reqGomis',value:users};
+    socket.send(JSON.stringify(massage));
+}
+
 socket.onopen = function() {
     console.log('openしたよ');
     var testJson3 = {
       key:'reqGomis',
       value:['AZ37','discord_teck'],
     };
-    socket.send(JSON.stringify(testJson3));
+    //socket.send(JSON.stringify(testJson3));
     /*
     var testJson = {key:'reqDisp',value:"kinme"};
     socket.send(JSON.stringify(testJson));
@@ -125,7 +112,8 @@ socket.onopen = function() {
     console.log("before emit");
     var user1 = "discord_teck";
     var user2 = "AZ37";
-    reqGomi("AZ37");
+    reqGomis(["AZ37",user1]);
+    //resGomi(user1);
 };
   //socket.send(JSON.stringify(massage));
 //};
@@ -157,9 +145,22 @@ socket.onmessage = function(message) {
             case 'resGomi':
             resGomi(wsRes.value);
             break;
+
+            case 'resGomis':
+            console.log(wsRes);
+            resGomi(wsRes.value);
+            break;
         }
     } catch (e) {
         alert(e);
         return;
     }
 }
+
+function emitIDs(){
+    console.log($("#IDs").val());
+    var resArray = $("#IDs").val().split(",");
+    console.log(resArray)
+    reqGomis(resArray);
+}
+

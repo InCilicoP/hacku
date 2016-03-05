@@ -58,10 +58,10 @@ DESIGNED & DEVELOPED by FREEHTML5.CO
   <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
 </head>
-<body ng-app = "App">
+<body>
 
   <!-- START #fh5co-header -->
-  <header id="fh5co-header-section" role="header" style="padding-top:0px" ng-controller="headerCtrl">
+  <header id="fh5co-header-section" role="header" style="padding-top:0px">
     <nav class="navbar navbar-inverse">
       <div class="container">
         <!-- 2.ヘッダ情報 -->
@@ -85,7 +85,14 @@ DESIGNED & DEVELOPED by FREEHTML5.CO
 
 
 
-  <div id="fh5co-main" style="margin-top:100px;" ng-controller="mainCtrl">
+  <div id="fh5co-main" style="margin-top:100px;">
+    <!--検索フォーム-->
+    <div class="navbar-form navbar-right" role="">
+      <div class="form-group">
+        <input id="IDs" type="text" class="form-control" placeholder="ユーザID,ユーザID, ...">
+      </div>
+      <button class="btn btn-default" style="margin:0;" onclick="emitIDs()">Submit</button>
+    </div>
 
     <svg></svg>
 
@@ -100,12 +107,6 @@ DESIGNED & DEVELOPED by FREEHTML5.CO
     </div>
   </footer>
 </div>
-
-<footer ng-controller="footerCtrl">
-  <!-- footer -->
-</footer>
-
-<div class="words">aaaaaaaa</div>
 
 <!--angularJS-->
 <script src="/static/bower_components/angular/angular.js"></script>
@@ -129,7 +130,6 @@ DESIGNED & DEVELOPED by FREEHTML5.CO
 <script src="/static/js/fastclick.js"></script>
 <!-- Main JS -->
 <script src="/static/js/main.js"></script>
-<script src="/static/js/qemit.js"></script>
 <!-- d3.js -->
 <script src="/static/js/d3.v3.min.js"></script>
 <script src="/static/js/d3.layout.cloud.js"></script>
@@ -152,24 +152,24 @@ DESIGNED & DEVELOPED by FREEHTML5.CO
     .text("Loading...");
 
     function make(json){
-      console.log(json);
+      //console.log(json);
       //d3.json(json, function(data){
         var data = json;
         console.log(data);
         var h = 600;
         var w = 600;
-        data = data.splice(0, 150);
+        //data = data.splice(0, 150);
 
         var random = d3.random.irwinHall(2)
 
         var countMax = d3.max(data, function(d){ return d.count} );
         var sizeScale = d3.scale.linear().domain([0, countMax]).range([10, 100])
         var colorScale = d3.scale.category20();
-        var colorpalette = ["yellow","red","blue","green","purple","orange","cyan","deeppink","lightgreen","darkgreen","navy","moccasin","maroon","lightslategray","silver"];
+        var colorpalette = ["blue","red","green","yellow","purple","orange","cyan","deeppink","lightgreen","darkgreen","navy","moccasin","maroon","lightslategray","silver"];
         var users = new Array();
 
         var words = data.map(function(d) {
-          console.log(d);
+          //console.log(d);
           return {
             text: d.word,
           size: sizeScale(d.count), //頻出カウントを文字サイズに反映
@@ -223,6 +223,7 @@ DESIGNED & DEVELOPED by FREEHTML5.CO
         .attr({
           "class" : function(d) { return d.text; },
           "text-anchor":"middle",
+          "default-color": function(d) { return colorget(d.user); },
           "transform": function(d) {
             return "translate(" + [w/2+d.x, h/2+d.y] + ")rotate(" + d.rotate + ")";
           }
@@ -234,15 +235,26 @@ DESIGNED & DEVELOPED by FREEHTML5.CO
 
 $("svg").on("click","text",function(){
   console.log($(this).attr('class'));
-  $("."+$(this).attr('class')).css("fill","red");
+  //$("."+$(this).attr('class')).attr("class", "changed");
+  $("."+$(this).attr('class')).css("fill", "black");
 });
 
-$(".words").on("click",function(){
-  console.log("YO");
-  $(".words").css("background-color","red");
-});
+$("svg").on({
+  "mouseenter": function(){
+    console.log("on! "+$(this).html());
+    $("."+$(this).attr('class')).css("fill", "black");
+  },
+  "mouseleave": function(){
+    console.log("off! "+$(this).attr('class'));
+    //$("."+$(this).attr('class')).css("fill", "black");
+    $("."+$(this).attr('class')).each(function(i){
+      $(this).css("fill", $(this).attr('default-color'));
+    });
+    
+  }
+}, "text");
 
-$(".words").css("border", "3px solid red");
 </script>
+<script src="/static/js/qemit.js"></script>
 </body>
 </html>
