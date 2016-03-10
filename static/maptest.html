@@ -5,6 +5,10 @@
     <title>Test Map</title>
     <script>
       var socket = new WebSocket("ws://localhost:8080/ws");
+      var nodes = [];
+      var nodes1 = [];
+      var nodes2 = [];
+      var links = [];
       socket.onopen = function() {
           console.log('openしたよ');
           var testJson3 = {
@@ -15,38 +19,79 @@
       };
       socket.onmessage = function(message){
         messageAry = JSON.parse(message.data);
-        console.log(messageAry);
-        var nodes = [];
-        for(i=0;i<messageAry.value.length;i++){
-          var check = 0;
-          nodes.forEach(function(node){
-            if(node.word == messageAry.value[i].word){check++}
-          });
-          if(check<1){
-            id:i,
-            nodes.push({word:messageAry.value[i].word});
-          }
+        switch(messageAry.key){
+          case 'resGomis':
+            console.log(messageAry);
+            for(i=0;i<messageAry.value.length;i++){
+              var check = 0;
+              nodes.forEach(function(node){
+                if(node.word == messageAry.value[i].word){check++}
+              });
+              if(check<1){
+                id:i,
+                nodes.push({word:messageAry.value[i].word});
+              }
+            }
+            console.log(nodes);
+            for(i=0;i<messageAry.value.length;i++){
+              console.log(messageAry.value[i].userID);
+              if(messageAry.value[i].userID == 'AZ37'){
+                nodes1.push({word:messageAry.value[i].word,count:messageAry.value[i].count});
+              }
+              else{
+                nodes2.push({word:messageAry.value[i].word,count:messageAry.value[i].count});
+              }
+            }
+            console.log(nodes1);
+            console.log(nodes2);
+            var testJson4 = {
+              key:'reqNewGomi',
+              value:['AZ37','discord_teck'],
+            }
+            socket.send(JSON.stringify(testJson4));
+            break;
+          case 'resNewGomi':
+            console.log(messageAry);
+            messageAry.value.forEach(function(wordAry){
+              for(i2=0;i2<nodes.length;i2++){
+                if(nodes[i2].word == wordAry[0]){
+                  for(i=1;i<wordAry.length;i++){
+                    for(i3=0;i3<nodes.length;i3++){
+                      if(nodes[i3].word == wordAry[i]){
+                        //console.log(nodes[i2].id);
+                        //console.log(nodes[i3].id);
+                        links.push({source:nodes[i2].index,target:nodes[i3].index});
+                      }
+                    }
+                  }
+                }
+              }
+            });
+            console.log(nodes);
+            forcee(nodes,links,nodes1,nodes2);
+            break;
         }
-        force(nodes)
       }
     </script>
   </head>
   <body>
     <script src="http://d3js.org/d3.v3.js" charset="utf-8"></script>
     <script>
-      var force = function(nodes){
+
+      var forcee = function(nodes,links,nodes1,nodes2){
+        console.log('描画開始');
         var w = 800;
         var h = 800;
         //var nodes = [ {id:0}, {id:1}, {id:2}, {id:3} ];
-        var links = [
-                    ];
+        //var links = [];
+
        var force = d3.layout.force()
                      .nodes(nodes)
                      .links(links)
                      .size([w, h])
                      .linkStrength(0.1)
                      .friction(0.9)
-                     .distance(200)
+                     .distance(50)
                      .charge(-300)
                      .gravity(0.1)
                      .theta(0.8)
@@ -57,7 +102,7 @@
                       .data(links)
                       .enter()
                       .append("line")
-                      .attr({opacity:0})
+                      .attr({opacity:1})
                       .style({stroke: "#ccc",
                               "stroke-width": 1});
         var node = svg.selectAll("circle")
@@ -66,22 +111,15 @@
                       .append("circle")
                       .attr({r: 20,
                              opacity: 0})
-                      .style({fill: "red"})
+                      .style({fill: 'red'})
                       .call(force.drag);
         var label = svg.selectAll('text')
                       .data(nodes)
                       .enter()
                       .append('text')
                       .attr({"text-anchor":"middle","fill":"black"})
-                      .style({"font-size":11})
+                      .style({"font-size":13})
                       .text(function(d) { return d.word;});
-        var node2 = svg.selectAll('circle')
-          .data(nodes)
-          .enter()
-          .append('circle')
-          .attr({r:100,opacity:0.2})
-          .style({fill:'blue'})
-          .call(force.drag);
         force.on("tick", function() {
           link.attr({x1: function(d) { return d.source.x; },
                      y1: function(d) { return d.source.y; },
@@ -91,10 +129,33 @@
                      cy: function(d) { return d.y; }});
           label.attr({x: function(d) { return d.x; },
                       y: function(d) { return d.y; }});
-          node2.attr({cx: function(d) { return d.x; },
-                     cy: function(d) { return d.y; }});
+        });
+        function Sleep( T ){
+          var d1 = new Date().getTime();
+          var d2 = new Date().getTime();
+          while( d2 < d1+1000*T ){    //T秒待つ
+            d2=new Date().getTime();
+          }
+          return;
+        }
+        Sleep( 3 );//1秒待つ
+        console.log(nodes);
+        nodes1.forEach(function(doc){
+          for(i=0;i<nodes.length;i++){
+            if(nodes[i].word == doc.word){
+              svg.append('circle').attr({'cx':nodes[i].x,'cy':nodes[i].y,'r': 20*doc.count,'fill':'red',opacity: 0.05});
+            }
+          }
+        });
+        nodes2.forEach(function(doc){
+          for(i=0;i<nodes.length;i++){
+            if(nodes[i].word == doc.word){
+              svg.append('circle').attr({'cx':nodes[i].x,'cy':nodes[i].y,'r': 20*doc.count,'fill':'blue',opacity: 0.05});
+            }
+          }
         });
       }
+
   </script>
   </body>
 </html>

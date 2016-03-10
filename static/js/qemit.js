@@ -96,10 +96,10 @@ function reqGomis(users){
 socket.onopen = function() {
     console.log('openしたよ');
     var testJson3 = {
-      key:'reqGomis',
+      key:'reqNewGomi',
       value:['AZ37','discord_teck'],
     };
-    //socket.send(JSON.stringify(testJson3));
+    socket.send(JSON.stringify(testJson3));
     /*
     var testJson = {key:'reqDisp',value:"kinme"};
     socket.send(JSON.stringify(testJson));
@@ -163,4 +163,3 @@ function emitIDs(){
     console.log(resArray)
     reqGomis(resArray);
 }
-

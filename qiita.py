@@ -1,7 +1,7 @@
 from qiita_v2.client import QiitaClient
 
 def getFavID(usrid): #ユーザIDを渡すとユーザのお気に入り(ストックした記事)の全ての記事のIDをリストにして返します
-    client = QiitaClient(access_token='63cea801ef0ad9d73cf028fcd34fd59941f11473')
+    client = QiitaClient(access_token='ebad5a802a2846451a75579069d0bec6364d0c69')
     idList = []
     favList = client.list_user_stocks(usrid).to_json()
     for fav in favList:
@@ -9,7 +9,7 @@ def getFavID(usrid): #ユーザIDを渡すとユーザのお気に入り(スト�
     return idList
 
 def getTag(idList): #記事IDをリストで渡すとリスト上全ての記事のタグをキーワードで返します
-    client = QiitaClient(access_token='63cea801ef0ad9d73cf028fcd34fd59941f11473')
+    client = QiitaClient(access_token='ebad5a802a2846451a75579069d0bec6364d0c69')
     words = []
     for articleid in idList:
         item = client.get_item(articleid).to_json()

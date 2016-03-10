@@ -75,10 +75,7 @@ class SendWebSocket(tornado.websocket.WebSocketHandler):
                 #idからお気に入りリストを取ってくる
                 favAry = qiita.getFavID(userID)
                 tagAry = qiita.getTag(favAry)
-                allAry = []
-                for wordss in tagAry:
-                    allAry.append(wordss)
-                countResult = qiita.countUniqWords(allAry,userID)
+                countResult = qiita.countUniqWords(tagAry,userID)
                 for countResultEach in countResult:
                     fkinResult.append(countResultEach)
             sendData = {
@@ -86,6 +83,23 @@ class SendWebSocket(tornado.websocket.WebSocketHandler):
                 'value':fkinResult
             }
             print(sendData)
+            sendDataStr = json.dumps(sendData)
+            self.write_message(sendDataStr)
+        elif messageJson['key'] == 'reqNewGomi':
+            print('reqNewGomiのリクエストが届きました')
+            sendAry = []
+            for userID in messageJson['value']:
+                print(userID)
+                favAry = qiita.getFavID(userID)
+                for fav in favAry:
+                    oneAry = [fav]
+                    tagAry = qiita.getTag(oneAry)
+                    sendAry.append(tagAry)
+            print(sendAry)
+            sendData = {
+                'key':'resNewGomi',
+                'value':sendAry
+            }
             sendDataStr = json.dumps(sendData)
             self.write_message(sendDataStr)
 
@@ -115,19 +129,6 @@ app = tornado.web.Application([
     (r"/(apple-touch-icon\.png)", tornado.web.StaticFileHandler,
     dict(path=settings['static_path'])),
 ], **settings)
-
-def addCount(ary,dicti):
-    for docAry in ary:
-        for docAry2 in ary:
-            if docAry != docAry2:
-                swicher = 0
-                for docDict in dicti[docAry]:
-                    if docDict == docAry2:
-                        swicher = 1
-                if swicher == 0:
-                    dicti[docAry] = docAry2
-    return dicti
-
 
 
 if __name__ == "__main__":
